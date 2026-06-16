@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="登録不要、無料で使えるこれから乗る電車のメモができるツールです。">
+    <meta name="keywords" content="Pond Pastel,無料,登録不要,free,電車,トレイン,train,乗り換え,乗換,transfer,メモ,ノート,note">
+    <link rel="canonical" href="https://pond-pastel.github.io/train_note/">
+    <title>トレインノート</title>
+    <link rel="icon" href="https://pond-pastel.github.io/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="train_note.css">
+    <!--ogp-->
+    <meta property="og:site_name" content="Pond Pastel">
+    <meta property="og:title" content="トレインノート(電車の時間をメモするツール) - Pond Pastel">
+    <meta property="og:description" content="登録不要、無料で使えるこれから乗る電車のメモができるツールです。">
+    <meta property="og:url" content="https://pond-pastel.github.io/train_note/">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://pond-pastel.github.io/train_note/image.png">
+    <!--/ogp-->
+    <!--twitter-->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@pond_pastel_dev">
+    <meta name="twitter:title" content="トレインノート(電車の時間をメモするツール) - Pond Pastel">
+    <meta name="twitter:description" content="登録不要、無料で使えるこれから乗る電車のメモができるツールです。">
+    <meta name="twitter:image" content="https://pond-pastel.github.io/train_note/image.png">
+    <!--/twitter-->
+    <meta name="robots" content="index, follow">
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "トレインノート(電車の時間をメモするツール) - Pond Pastel",
+        "url": "https://pond-pastel.github.io/train_note/index.html",
+        "applicationCategory": "Utility",
+        "softwareVersion": "1.2.0",
+        "operatingSystem": "All",
+        "description": "登録不要、無料で使えるこれから乗る電車のメモができるツールです。",
+        "creator": {
+            "@type": "Person",
+            "name": "Pond Pastel"
+        },
+        "datePublished": "2026-05-26",
+        "dateModified": "2026-06-xx",
+        "publisher": {
+            "@type": "Organization",
+            "name": "Pond Pastel",
+            "url": "https://pond-pastel.github.io/",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https://pond-pastel.github.io/logo.png"
+            }
+        },
+        "image": "https://pond-pastel.github.io/image.png",
+        "browserRequirements": "JavaScript対応ブラウザ",
+        "inLanguage": "ja"
+    }
+    </script>
+    <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "トップ",
+                    "item": "https://pond-pastel.github.io/"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": "トレインノート",
+                    "item": "https://pond-pastel.github.io/train_note/index.html"
+                }
+            ]
+        }
+    </script>
+</head>
+<body>
+    <script type="module" src="main.js"></script>
+    <div id="toast">
+        <input type="checkbox" name="open" id="show-toast">
+        <!--<span id="modal"></span>-->
+        <div class="details-content">
+            <div>
+                <div id="toast-content"></div>
+                <div class="flex-center bottom-sticky" id="toast-button-group"></div>
+            </div>
+        </div>
+    </div>
+    <div id="look">
+        <input type="checkbox" name="open" id="look-note">
+        <div class="details-content">
+            <div>
+                <div id="look-settings" style="display: none;">
+                    <div>
+                        <h4>タグ絞り込み</h4>
+                        <select class="search-select" id="search-tag-select">
+                            <option value="" selected>しない</option>
+                        </select>
+                    </div>
+                    <div>
+                        <h4>ソート</h4>
+                        <select class="search-select" id="sort-select">
+                            <option value="" selected>しない</option>
+                            <option value="time">時間</option>
+                            <option value="fare">料金</option>
+                        </select>
+                        <select class="search-select" id="order-select">
+                            <option value="ascending" selected>昇順</option>
+                            <option value="descending">降順</option>
+                        </select>
+                    </div>
+                </div>
+                <div id="data-list"></div>
+            </div>
+        </div>
+    </div>
+    <div id="insert-area">
+        <h1>トレインノート</h1>
+        <div>
+            <button id="description-button">説明</button>
+        </div>
+        <div>
+            <button id="how-to-use-button">使い方</button>
+        </div>
+        <div>
+            <button id="show-data">ノートを見る</button>
+        </div>
+        <div>
+            <p class="insert-box">
+                <span class="insert-title">題名</span>
+                <input type="text" class="insert save-content-insert" placeholder="ノートのタイトル" id="insert-title" data-id="title">
+            </p>
+            <div id="insert">
+                <h3 id="loading">読み込み中…</h3>
+            </div>
+            <div class="details" id="other-options">
+                <div>
+                    <button class="details-button" id="open-other-options-button" data-target="open-other-options">
+                        <b>その他のオプション</b>
+                        <input type="checkbox" name="open" id="open-other-options">
+                    </button>
+                </div>
+                <div class="details-content">
+                    <div>
+                        <div class="grid-insert-box">
+                            <div class="insert-box">
+                                <span class="insert-title">タグ</span>
+                                <input type="text" class="insert save-content-insert" placeholder="例: 旅行" id="insert-tag" data-id="insertTag">
+                            </div>
+                            <div id="tag-box">
+                                <button id="add-tag-button">+タグを追加</button>
+                                <div id="tag-list"></div>
+                            </div>
+                        </div>
+                        <div class="grid-insert-box">
+                            <div class="insert-title">このノートのメモ</div>
+                            <textarea class="save-content-insert" placeholder="例: 1日乗車券使用" id="insert-note" data-id="note"></textarea>
+                        </div>
+                        <div class="grid-insert-box">
+                            <div class="insert-title">URL</div>
+                            <div class="insert-box">
+                                <span class="insert-title">表示</span>
+                                <input type="text" class="insert save-content-insert" placeholder="URLの表示名" id="insert-url-title" data-id="insertUrl">
+                            </div>
+                            <div class="insert-box">
+                                <span class="insert-title">URL</span>
+                                <input type="text" class="insert save-content-insert" placeholder="URL" id="insert-url" data-id="insertUrl">
+                            </div>
+                            <div id="url-box">
+                                <button id="add-url-button">+URLを追加</button>
+                                <div id="url-list"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <button id="add-note">+ノートを追加</button>
+            </div>
+            <div>
+                <button id="reset-button">ノートをリセット</button>
+            </div>
+        </div>
+        <div id="settings">
+            <div>
+                <button class="details-button" id="open-settings-button" data-target="open-settings">
+                    <b>設定・詳細</b>
+                </button>
+            </div>
+            <input type="checkbox" id="open-settings">
+            <div class="details-content">
+                <div>
+                    <h2>設定</h2>
+                    <div>
+                        <div>
+                            ノートの表示方式: 
+                            <select class="settings-select" id="display-method">
+                                <option value="list" selected>リスト</option>
+                                <option value="table">表</option>
+                            </select>
+                        </div>
+                        <div>
+                            <h3>外観モード</h3>
+                            <button class="appearance-mode-button" data-target="light-mode" title="ライトモード">
+                                <input type="radio" name="appearance-mode" class="appearance-mode" id="light-mode">
+                                <svg width="100px" height="100px" viewBox="0 0 100 100" class="appearance-mode-setting">
+                                    <path fill="#eee" d="M 0 10 Q 0 0, 10 0 H 90 Q 100 0, 100 10 V 90 Q 100 100, 90 100 H 10 Q 0 100, 0 90 Z" />
+                                    <path class="light-check svg-check" fill="currentColor" d="M 40 10 H 60 L 50 20 Z" />
+                                    <circle class="light-mark" fill="currentColor" cx="50" cy="50" r="20" />
+                                    <text class="light-text" x="14" y="90">ライトモード</text>
+                                </svg>
+                            </button>
+                            <button class="appearance-mode-button" data-target="dark-mode" title="ダークモード">
+                                <input type="radio" name="appearance-mode" class="appearance-mode" id="dark-mode">
+                                <svg width="100px" height="100px" viewBox="0 0 100 100" class="appearance-mode-setting">
+                                    <path fill="#222" d="M 0 10 Q 0 0, 10 0 H 90 Q 100 0, 100 10 V 90 Q 100 100, 90 100 H 10 Q 0 100, 0 90 Z" />
+                                    <path class="dark-check svg-check" fill="currentColor" d="M 40 10 H 60 L 50 20 Z" />
+                                    <path class="dark-mark" fill="currentColor" d="M 30 50 A 10 10 0 0 0 50 30 A 20 20 0 0 1 50 70 A 20 20 0 0 1 30 50 Z" />
+                                    <text class="dark-text" x="14" y="90">ダークモード</text>
+                                </svg>
+                            </button>
+                            <button class="appearance-mode-button" data-target="system-mode" title="システム">
+                                <input type="radio" name="appearance-mode" class="appearance-mode" id="system-mode" checked>
+                                <svg width="100px" height="100px" viewBox="0 0 100 100" class="appearance-mode-setting">
+                                    <path class="system-bg" fill="currentColor" d="M 0 10 Q 0 0, 10 0 H 90 Q 100 0, 100 10 V 90 Q 100 100, 90 100 H 10 Q 0 100, 0 90 Z" />
+                                    <path class="system-check svg-check" fill="currentColor" d="M 40 10 H 60 L 50 20 Z" />
+                                    <path class="system-mark" fill="currentColor" d="M 50 30 A 20 20 0 0 1 50 70 A 20 20 0 0 1 30 50 A 20 20 0 0 0 50 50 Z" />
+                                    <text class="system-text" x="26" y="90">システム</text>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <h2>詳細</h2>
+                    <div>
+                        <p>
+                            <a href="https://pond-pastel.github.io/home.html" target="_blank">ホームページ</a>
+                        </p>
+                        <p>
+                            <div>
+                                <b>不具合のお問い合わせやご要望はこちら</b>
+                            </div>
+                            <a href="https://x.com/pond_pastel_dev" target="_blank" rel="nofollow noopener noreferrer">X(旧: Twitter): @pond_pastel_dev</a>(DMでもお受けしております)
+                        </p>
+                    </div>
+                    <h3>お知らせ</h3>
+                    <div>
+                        現在お知らせはありません。
+                    </div>
+                    <h3>バージョン履歴</h3>
+                    <div>
+                        <div class="details">
+                            <div>
+                                <button class="details-button" data-target="v-1-0-0">
+                                    <b>Ver.1.0.0</b>
+                                </button>
+                            </div>
+                            <input type="checkbox" name="open" id="v-1-0-0">
+                            <div class="details-content">
+                                <div>
+                                    <div>
+                                        <time datetime="2026-05-26">2026年5月26日</time>
+                                    </div>
+                                    <div>
+                                        サイトの公開
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="details">
+                            <div>
+                                <button class="details-button" data-target="v-1-1-0">
+                                    <b>Ver.1.1.0</b>
+                                </button>
+                            </div>
+                            <input type="checkbox" name="open" id="v-1-1-0">
+                            <div class="details-content">
+                                <div>
+                                    <div>
+                                        <time datetime="2026-05-28">2026年5月28日</time>
+                                    </div>
+                                    <div>
+                                        外観モードをツール内の設定で変えられるようにしました。
+                                        <br>
+                                        入力内容をリセットできるようにしました。
+                                        <br>
+                                        保存したノートを後から編集できるようにしました。
+                                        <br>
+                                        一部表現を見直しました。
+                                        <br>
+                                        UIを改善しました。
+                                        <br>
+                                        不具合を修正しました。
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="details">
+                            <div>
+                                <button class="details-button" data-target="v-1-2-0">
+                                    <b>Ver.1.2.0</b>
+                                </button>
+                            </div>
+                            <input type="checkbox" name="open" id="v-1-2-0" checked>
+                            <div class="details-content">
+                                <div>
+                                    <div>
+                                        <time datetime="2026-06-xx">2026年6月xx日</time>
+                                    </div>
+                                    <div>
+                                        使い方を追加しました。
+                                        <br>
+                                        ピンクを基調としたデザインに変更しました。
+                                        <br>
+                                        問い合わせ先がわかりやすくなるよう文言を追加しました。
+                                        <br>
+                                        より多くのユーザーが使いやすいよう改善しました。
+                                        <br>
+                                        ツールの使用体験がより良いものとなるよう改善しました。
+                                        <br>
+                                        軽微な不具合を修正しました。
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
